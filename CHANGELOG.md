@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/easytocloud/ssostart/compare/v1.0.1...v1.0.2) (2026-03-30)
+
+
+### Bug Fixes
+
+* simplify completion to avoid state machine issues ([f5b92e3](https://github.com/easytocloud/ssostart/commit/f5b92e3156d3d50816a4173b904d476292bfc2e3))
+
 ## [1.0.1](https://github.com/easytocloud/ssostart/compare/v1.0.0...v1.0.1) (2026-03-30)
 
 
