@@ -92,7 +92,10 @@ if [[ -z "${AWS_PROFILE:-}" ]]; then
     if [[ "$has_session_hint" == "false" ]]; then
         config_file="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
         if [[ -f "$config_file" ]]; then
-            mapfile -t sso_sessions < <(grep '^\[sso-session ' "$config_file" | sed 's/^\[sso-session //;s/\]$//')
+            sso_sessions=()
+            while IFS= read -r line; do
+                sso_sessions+=("$line")
+            done < <(grep '^\[sso-session ' "$config_file" | sed 's/^\[sso-session //;s/\]$//')
             if [[ ${#sso_sessions[@]} -eq 1 ]]; then
                 echo "Auto-selecting SSO session: ${sso_sessions[0]}"
                 EXTRA_OPTS=("--sso-session" "${sso_sessions[0]}" "${EXTRA_OPTS[@]+"${EXTRA_OPTS[@]}"}")
