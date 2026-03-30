@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/easytocloud/ssostart/compare/v1.1.0...v1.1.1) (2026-03-30)
+
+
+### Bug Fixes
+
+* replace mapfile with while loop for bash 3.x compatibility ([488c02a](https://github.com/easytocloud/ssostart/commit/488c02a05cc64a6ee2e3000ec214d890af74b924))
+
 # [1.1.0](https://github.com/easytocloud/ssostart/compare/v1.0.2...v1.1.0) (2026-03-30)
 
 
