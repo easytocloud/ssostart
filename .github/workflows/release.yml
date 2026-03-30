@@ -1,0 +1,51 @@
+# .github/workflows/release.yml
+# Start Homebrew Releaser when a new commit lands on main
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  homebrew-releaser:
+    runs-on: ubuntu-latest
+    name: homebrew-releaser
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure 1Password Service Account
+        uses: 1password/load-secrets-action/configure@v1
+        with:
+          service-account-token: ${{ secrets.OP_SERVICE_ACCOUNT_TOKEN }}
+
+      - name: Load GitHub credentials
+        id: load-github-credentials
+        uses: 1password/load-secrets-action@v1
+        with:
+          export-env: false
+        env:
+          HOMEBREW_TAP_GITHUB_TOKEN: op://CICD/github-easytocloud-brew/credential
+
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimmy/semantic-release-action@v4
+        env:
+          GH_TOKEN: ${{ steps.load-github-credentials.outputs.HOMEBREW_TAP_GITHUB_TOKEN }}
+
+      - name: Release ssostart to easytocloud/homebrew-tap
+        if: steps.semantic.outputs.new_release_published == 'true'
+        uses: Justintime50/homebrew-releaser@v1
+        with:
+          homebrew_owner: easytocloud
+          homebrew_tap: homebrew-tap
+          formula_folder: Formula
+          github_token: ${{ steps.load-github-credentials.outputs.HOMEBREW_TAP_GITHUB_TOKEN }}
+          commit_owner: homebrew-releaser
+          commit_email: homebrew-releaser@easytocloud.com
+
+          install: |
+            bin.install "distribution/bin/ssostart"
+            zsh_completion.install "distribution/completions/_ssostart"
+
+          update_readme_table: true
+          skip_commit: false
+          debug: true
