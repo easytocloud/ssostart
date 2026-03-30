@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/easytocloud/ssostart/compare/v1.0.2...v1.1.0) (2026-03-30)
+
+
+### Features
+
+* auto-select sso-session when exactly one exists in config ([271527a](https://github.com/easytocloud/ssostart/commit/271527ac4eb5d91896b062b5c03a9adac3ef388b))
+
 ## [1.0.2](https://github.com/easytocloud/ssostart/compare/v1.0.1...v1.0.2) (2026-03-30)
 
 
