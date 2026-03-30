@@ -21,6 +21,11 @@ OPTIONS:
   --help              Show this help message
   Any other options   Passed directly to 'aws sso login'
 
+AUTO SSO SESSION:
+  If no $AWS_PROFILE is set and neither --profile nor --sso-session is given,
+  ssostart will read the active config file and automatically pass
+  --sso-session <name> when exactly one [sso-session] is found.
+
 CONFIGURATION:
   Default options can be set in ~/.ssostartrc (one option per line)
 
@@ -73,6 +78,28 @@ fi
 
 # Add all command line arguments to options
 EXTRA_OPTS+=("$@")
+
+# Auto-select SSO session if no profile or sso-session is specified
+if [[ -z "${AWS_PROFILE:-}" ]]; then
+    has_session_hint=false
+    for opt in "${EXTRA_OPTS[@]+"${EXTRA_OPTS[@]}"}"; do
+        if [[ "$opt" == "--profile" || "$opt" == --profile=* || "$opt" == "--sso-session" || "$opt" == --sso-session=* ]]; then
+            has_session_hint=true
+            break
+        fi
+    done
+
+    if [[ "$has_session_hint" == "false" ]]; then
+        config_file="${AWS_CONFIG_FILE:-$HOME/.aws/config}"
+        if [[ -f "$config_file" ]]; then
+            mapfile -t sso_sessions < <(grep '^\[sso-session ' "$config_file" | sed 's/^\[sso-session //;s/\]$//')
+            if [[ ${#sso_sessions[@]} -eq 1 ]]; then
+                echo "Auto-selecting SSO session: ${sso_sessions[0]}"
+                EXTRA_OPTS=("--sso-session" "${sso_sessions[0]}" "${EXTRA_OPTS[@]+"${EXTRA_OPTS[@]}"}")
+            fi
+        fi
+    fi
+fi
 
 # Determine if browser authentication is possible
 # Browser auth works when:
