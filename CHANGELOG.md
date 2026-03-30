@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/easytocloud/ssostart/compare/v1.0.0...v1.0.1) (2026-03-30)
+
+
+### Bug Fixes
+
+* correct glob pattern for aws-envs completion ([de70983](https://github.com/easytocloud/ssostart/commit/de70983e6eedeaacd030a5e2c006cca356e46162))
+
 # 1.0.0 (2026-03-30)
 
 
