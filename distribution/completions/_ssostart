@@ -13,7 +13,8 @@ _ssostart() {
       local envs_dir="$HOME/.aws/aws-envs"
       if [[ -d "$envs_dir" ]]; then
         local -a env_list
-        env_list=(${envs_dir}/*(N/:t))
+        env_list=(${envs_dir}/*(N/))
+        env_list=(${env_list:t})
         if [[ ${#env_list[@]} -gt 0 ]]; then
           _describe 'AWS environment' env_list
         fi
